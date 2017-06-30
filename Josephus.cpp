@@ -4,32 +4,36 @@
 using namespace std;
 int main(){
 
-  int people,i,j;
-  int num;
+  int people,i,count=1;
+  int num,val;
   LinkedList list(1);
 
 
-  cout<<"Enter the number of people in the circle (3 or more): "<<endl;
+  cout<<"\nEnter the number of people in the circle: ";
   cin>>people;
-  cout<<endl;
 
   for (i=1;i<people;i++){
-    j = i+1;
-    list.AddToEnd(j);
+    list.AddToEnd(i+1);
   }
+  cout<<endl;
+  list.PrintLinkedList();
 
-  cout<<"Enter the number of people that will be skipped: "<<endl;
+  cout<<"\nEnter the number of people that will be skipped: ";
   cin>>num;
 
-  list.PrintLinkedList();
+  cout<<endl;
 
-  for (j=0;i<num;j++){
-    cout<<&num<<endl;
-    list.NextNode();
+  while (list.Length()>1){
+    for (i=0;i<=num;i++){
+      list.NextNode();
+    }
+
+    cout << "\nRound " << count << endl;
+    cout << "\nEliminated: "<< list.RemoveCurrent() << endl;
+    //list.PrintLinkedList();
+    cout << endl;
+    count++;
   }
-
-  cout << "Person Killed Off: " << list.RemoveCurrent() << endl;
-
-  list.PrintLinkedList();
+  cout<<endl;
 
 }

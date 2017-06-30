@@ -65,7 +65,7 @@ class LinkedList{
 LinkedList::LinkedList()
 {
     Head = NULL;
-    Current = Head->Next;
+    Current = Head;
 }
 
 LinkedList::LinkedList(int val)
@@ -87,11 +87,13 @@ void LinkedList::PrintLinkedList()
         cout << "\nThe list is empty" << endl;
         return;
     }
-    cout << "LinkedList: "<<endl;
+    cout << "Survivor(s): ";
     while (temp!=NULL) {
-        cout << temp->value<<endl;
+        cout << temp->value<<" ";
         temp = temp->Next;
     }
+    cout << endl;
+    delete temp;
 }
 
 void LinkedList::AddToEnd(int data){
@@ -309,12 +311,14 @@ void LinkedList::Empty(){
 }
 
 void LinkedList::NextNode(){
+
   if (Current->Next!=NULL){
     Current = Current->Next;
   }
   else{
     Current = Head;
   }
+
 }
 
 void LinkedList::InsertAfterCurrent(int data){
@@ -368,23 +372,34 @@ int LinkedList::RemoveFromFront(){
 }
 
 int LinkedList::RemoveCurrent(){
-  Node* temp = new Node();
-  Node* temp2 = new Node();
+  Node* temp = Head;
 
-  int val;
+  int val = Current->value;
 
-  temp = Head;
-  temp2 = Head->Next;
-
-  while (temp2!=Current){
-    temp = temp->Next;
+  if (temp==Current){
+    Head = Head->Next;
+    Current = Head;
+    delete temp;
   }
+  else{
 
-  val = temp2->value;
-  temp->Next = temp2->Next;
-  Current = Current->Next;
+    Node* temp2 = Head->Next;
 
-  delete temp2;
+    while (temp2!=Current){
+      temp = temp->Next;
+      temp2 = temp2->Next;
+    }
+    if (temp2->Next!=NULL){
+      temp->Next = temp2->Next;
+      Current = Current->Next;
+    }
+    else{
+      temp->Next = NULL;
+      Current = Head;
+    }
+
+    delete temp2;
+  }
   return val;
 }
 
