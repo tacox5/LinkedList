@@ -57,7 +57,7 @@ template <typename T> class LinkedList{
     void NextNode();
     void InsertAfterCurrent(T data);
     int RemoveCurrent();
-    T RemoveAtIndex(T index); //
+    T RemoveAtIndex(int index); //
     int RemoveFromFront();
     int RemoveFromEnd();
     bool ElementExists(T data); //
@@ -155,25 +155,31 @@ template <class T>
 void LinkedList<T>::RemoveFirst(T data){
   // Create two nodes to keep track of positions
   Node<T>* temp = new Node<T>();
-  Node<T>* temp2 = new Node<T>();
 
-  // If the Head has the value
+  // If the Head has the value of the data, remove the head node
   if(Head->value==data){
-    temp2 = Head;
-    Head = temp2->Next;
-    delete temp2;
-    return;
+    temp = Head; // set the second temp node equal to the head
+    Head = temp->Next; // Update the head node
+    delete temp; // Remove the temp node
+    return; // Exit the method
   }
 
-  temp = Head;
-  temp2 = Head->Next;
+  Node<T>* temp2 = new Node<T>();
 
+  temp = Head; // set the temp node equal to the head
+  temp2 = Head->Next; // set the second temp equal to the next node
+
+  // Move through the list while temp2 is not null
   while (temp2!=NULL){
-    if(temp->value==data){
-      temp->Next = temp2->Next;
-      delete temp2;
+
+    // If the temp value is the value being searched for, delete temp2
+    if(temp2->value==data){
+      temp->Next = temp2->Next; // Point to the next node
+      delete temp2; // delete temp2
     }
-    temp = temp2;
+
+    // Update the nodes to the next node
+    temp = temp->Next;
     temp2 = temp2->Next;
   }
 }
@@ -438,8 +444,9 @@ int LinkedList<T>::RemoveCurrent(){
   return val;
 }
 
+// Remove a node and return the contents at a certain index
 template <class T>
-T LinkedList<T>::RemoveAtIndex(T index){
+T LinkedList<T>::RemoveAtIndex(int index){
   Node<T>* temp = new Node<T>();
   Node<T>* temp2 = new Node<T>();
 
