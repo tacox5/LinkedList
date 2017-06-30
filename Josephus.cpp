@@ -6,7 +6,7 @@ int main(){
 
   int people,i,count=1;
   int num,val;
-  LinkedList list(1);
+  LinkedList<int> list(1);
 
 
   cout<<"\nEnter the number of people in the circle: ";
@@ -30,7 +30,7 @@ int main(){
 
     cout << "\nRound " << count << endl;
     cout << "\nEliminated: "<< list.RemoveCurrent() << endl;
-    //list.PrintLinkedList();
+    list.PrintLinkedList();
     cout << endl;
     count++;
   }

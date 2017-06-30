@@ -2,8 +2,12 @@
 
 using namespace std;
 
-class Node{
-  friend class LinkedList;
+
+template <typename T> class LinkedList;
+
+
+template <typename T> class Node{
+  friend class LinkedList<T>;
   private:
     int value;
     Node *Next;
@@ -16,45 +20,41 @@ class Node{
       value = val;
       Next = NULL;
     }
-    Node(int val, Node* next){
-      value = val;
-      Next = next;
-    }
-    int getValue(void){
-      return value;
-    }
-
-    Node* getNext(void){
-      return Next;
-    }
 };
 
-class LinkedList{
+
+template <typename T> class LinkedList{
   private:
-    Node *Head;
-    Node *Current;
+    Node<T> *Head;
+    Node<T> *Current;
 
   public:
-    LinkedList(void);
-    LinkedList(int val);
-    void AddToFront(int data);
-    void AddToEnd(int data);
-    void RemoveFirst(int data);
-    void RemoveAll(int data);
-    void AddAtIndex(int data, int index);
+    LinkedList(){
+      Head = NULL;
+      Current = Head;
+    }
+    LinkedList(T val){
+      Head = new Node<T>(val);
+      Current = Head;
+    }
+    void AddToFront(T data);
+    void AddToEnd(T data);
+    void RemoveFirst(T data);
+    void RemoveAll(T data);
+    void AddAtIndex(T data, T index);
     void NextNode();
-    void InsertAfterCurrent(int data);
+    void InsertAfterCurrent(T data);
     int RemoveCurrent();
-    int RemoveAtIndex(int index);
+    T RemoveAtIndex(T index); //
     int RemoveFromFront();
     int RemoveFromEnd();
-    bool ElementExists(int data);
-    Node* Find(int data);
-    int IndexOf(int data);
+    bool ElementExists(T data); //
+    Node<T>* Find(T data); //
+    int IndexOf(T data); //
     int RetrieveFront();
     int RetrieveEnd();
-    int Retrieve(int index);
-    int* ToArray(int length);
+    T Retrieve(T index); //
+    int* ToArray(T length); //
     void Empty();
     int Length();
     ~LinkedList(void);
@@ -62,25 +62,14 @@ class LinkedList{
     void PrintLinkedList();
 };
 
-LinkedList::LinkedList()
-{
-    Head = NULL;
-    Current = Head;
+template <class T>
+LinkedList<T>::~LinkedList(void){  
 }
 
-LinkedList::LinkedList(int val)
+template <class T>
+void LinkedList<T>::PrintLinkedList()
 {
-    Head = new Node(val);
-    Current = Head;
-}
-
-LinkedList::~LinkedList()
-{
-}
-
-void LinkedList::PrintLinkedList()
-{
-    Node* temp = new Node();
+    Node<T>* temp = new Node<T>();
     temp = Head;
 
     if (temp == NULL) {
@@ -96,16 +85,16 @@ void LinkedList::PrintLinkedList()
     delete temp;
 }
 
-void LinkedList::AddToEnd(int data){
-  Node* newNode = new Node();
-  newNode->value=data;
+template <class T>
+void LinkedList<T>::AddToEnd(T data){
+  Node<T>* newNode = new Node<T>(data);
   newNode->Next=NULL;
 
   if (Head == NULL){
     Head = newNode;
   }
   else{
-    Node* temp = new Node();
+    Node<T>* temp = new Node<T>();
     temp = Head;
     while(temp->Next!=NULL){
       temp = temp->Next;
@@ -115,9 +104,9 @@ void LinkedList::AddToEnd(int data){
   }
 }
 
-void LinkedList::AddToFront(int data){
-  Node *newNode = new Node();
-  newNode->value=data;
+template <class T>
+void LinkedList<T>::AddToFront(T data){
+  Node<T> *newNode = new Node<T>(data);
   newNode->Next=NULL;
 
   if (Head == NULL){
@@ -125,7 +114,7 @@ void LinkedList::AddToFront(int data){
   }
 
   else{
-    Node *temp = new Node();
+    Node<T> *temp = new Node<T>();
 
     temp = Head;
     Head = newNode;
@@ -133,9 +122,10 @@ void LinkedList::AddToFront(int data){
   }
 }
 
-void LinkedList::RemoveFirst(int data){
-  Node* temp = new Node();
-  Node* del = new Node();
+template <class T>
+void LinkedList<T>::RemoveFirst(T data){
+  Node<T>* temp = new Node<T>();
+  Node<T>* del = new Node<T>();
 
   if(Head->value==data){
     del = Head;
@@ -158,9 +148,10 @@ void LinkedList::RemoveFirst(int data){
   }
 }
 
-void LinkedList::RemoveAll(int data){
-    Node* temp = new Node();
-    Node* del = new Node();
+template <class T>
+void LinkedList<T>::RemoveAll(T data){
+    Node<T>* temp = new Node<T>();
+    Node<T>* del = new Node<T>();
     temp = Head;
 
     while (temp != NULL && temp->value == data)
@@ -185,8 +176,9 @@ void LinkedList::RemoveAll(int data){
     }
 }
 
-int LinkedList::Length(){
-  Node* temp = new Node();
+template <class T>
+int LinkedList<T>::Length(){
+  Node<T>* temp = new Node<T>();
   temp = Head;
   int count=0;
 
@@ -198,9 +190,10 @@ int LinkedList::Length(){
 }
 
 
-bool LinkedList::ElementExists(int data){
-  Node* temp = new Node();
-  Node* del = new Node();
+template <class T>
+bool LinkedList<T>::ElementExists(T data){
+  Node<T>* temp = new Node<T>();
+  Node<T>* del = new Node<T>();
   bool exists = false;
 
   if(Head->value==data){
@@ -222,8 +215,9 @@ bool LinkedList::ElementExists(int data){
   return exists;
 }
 
-int LinkedList::IndexOf(int data){
-  Node* temp = new Node();
+template <class T>
+int LinkedList<T>::IndexOf(T data){
+  Node<T>* temp = new Node<T>();
   temp = Head;
   int count=0;
 
@@ -236,8 +230,9 @@ int LinkedList::IndexOf(int data){
   return -1;
 }
 
-Node* LinkedList::Find(int data){
-  Node* temp = new Node();
+template <class T>
+Node<T>* LinkedList<T>::Find(T data){
+  Node<T>* temp = new Node<T>();
   temp = Head;
 
   while(temp!=NULL){
@@ -248,15 +243,17 @@ Node* LinkedList::Find(int data){
   return NULL;
 }
 
-int LinkedList::RetrieveFront(){
+template <class T>
+int LinkedList<T>::RetrieveFront(){
   if (Head!=NULL)
     return Head->value;
   else
     return 0;
 }
 
-int LinkedList::RetrieveEnd(){
-  Node* temp = new Node();
+template <class T>
+int LinkedList<T>::RetrieveEnd(){
+  Node<T>* temp = new Node<T>();
   int val;
   temp = Head;
 
@@ -267,8 +264,9 @@ int LinkedList::RetrieveEnd(){
   return val;
 }
 
-int LinkedList::Retrieve(int index){
-  Node* temp = new Node();
+template <class T>
+T LinkedList<T>::Retrieve(T index){
+  Node<T>* temp = new Node<T>();
   temp = Head;
   int i=0;
   while (temp!=NULL){
@@ -280,8 +278,9 @@ int LinkedList::Retrieve(int index){
   return -1;
 }
 
-int* LinkedList::ToArray(int length){
-  Node* temp = new Node();
+template <class T>
+int* LinkedList<T>::ToArray(T length){
+  Node<T>* temp = new Node<T>();
   temp = Head;
 
   int i=0;
@@ -296,9 +295,10 @@ int* LinkedList::ToArray(int length){
   return array;
 }
 
-void LinkedList::Empty(){
-  Node* temp = new Node();
-  Node* next = new Node();
+template <class T>
+void LinkedList<T>::Empty(){
+  Node<T>* temp = new Node<T>();
+  Node<T>* next = new Node<T>();
   temp = Head;
 
   while(temp!=NULL){
@@ -310,7 +310,8 @@ void LinkedList::Empty(){
   Head = NULL;
 }
 
-void LinkedList::NextNode(){
+template <class T>
+void LinkedList<T>::NextNode(){
 
   if (Current->Next!=NULL){
     Current = Current->Next;
@@ -321,8 +322,9 @@ void LinkedList::NextNode(){
 
 }
 
-void LinkedList::InsertAfterCurrent(int data){
-  Node* newNode = new Node(data);
+template <class T>
+void LinkedList<T>::InsertAfterCurrent(T data){
+  Node<T>* newNode = new Node<T>(data);
 
   if (Current->Next==NULL){
     newNode->Next = NULL;
@@ -334,8 +336,9 @@ void LinkedList::InsertAfterCurrent(int data){
   }
 }
 
-int LinkedList::RemoveFromEnd(){
-  Node* temp = new Node();
+template <class T>
+int LinkedList<T>::RemoveFromEnd(){
+  Node<T>* temp = new Node<T>();
   int val;
   temp = Head;
 
@@ -347,7 +350,7 @@ int LinkedList::RemoveFromEnd(){
     Head = NULL;
   }
   else{
-    Node* temp2 = Head->Next;
+    Node<T>* temp2 = Head->Next;
 
     while (temp2->Next!=NULL){
       temp2 = temp2->Next;
@@ -360,8 +363,9 @@ int LinkedList::RemoveFromEnd(){
   return val;
 }
 
-int LinkedList::RemoveFromFront(){
-  Node* temp = new Node();
+template <class T>
+int LinkedList<T>::RemoveFromFront(){
+  Node<T>* temp = new Node<T>();
   int val;
 
   temp = Head;
@@ -371,8 +375,9 @@ int LinkedList::RemoveFromFront(){
   return val;
 }
 
-int LinkedList::RemoveCurrent(){
-  Node* temp = Head;
+template <class T>
+int LinkedList<T>::RemoveCurrent(){
+  Node<T>* temp = Head;
 
   int val = Current->value;
 
@@ -383,7 +388,7 @@ int LinkedList::RemoveCurrent(){
   }
   else{
 
-    Node* temp2 = Head->Next;
+    Node<T>* temp2 = Head->Next;
 
     while (temp2!=Current){
       temp = temp->Next;
@@ -403,9 +408,11 @@ int LinkedList::RemoveCurrent(){
   return val;
 }
 
-int LinkedList::RemoveAtIndex(int index){
-  Node* temp = new Node();
-  Node* temp2 = new Node();
+template <class T>
+T LinkedList<T>::RemoveAtIndex(T index){
+  Node<T>* temp = new Node<T>();
+  Node<T>* temp2 = new Node<T>();
+
   int i=1,val;
 
   temp = Head;
