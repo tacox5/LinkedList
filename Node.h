@@ -3,40 +3,52 @@
 using namespace std;
 
 
+
+// Forward declaration of LinkedList to be declared as a friend class to Node
 template <typename T> class LinkedList;
 
 
+// Create a templated Node class
 template <typename T> class Node{
-  friend class LinkedList<T>;
+  friend class LinkedList<T>; // Allow the LinkedList to use Node private variables
   private:
-    int value;
-    Node *Next;
+    T value; // Templated value for the Node
+    Node* Next; // Pointer to the next node
 
   public:
     Node(void){
+      // If no value is given, initialize a node with no value
       Next = NULL;
     }
     Node(int val){
+      // If value is given, initialize a node with a value
       value = val;
       Next = NULL;
     }
 };
 
 
+//Create a templated LinkedList class
 template <typename T> class LinkedList{
   private:
-    Node<T> *Head;
-    Node<T> *Current;
+    Node<T> *Head; // Templated Node pointer to the beginning node
+    Node<T> *Current; // Templated Node pointer to the current node
 
   public:
+    // Constructor for no given value
     LinkedList(){
-      Head = NULL;
-      Current = Head;
+      Head = NULL; // Head is Null
+      Current = Head; // Current is set to head
     }
+
+    // Constructor for a given templated value
     LinkedList(T val){
-      Head = new Node<T>(val);
+      Head = new Node<T>(val); // Initialize a node with a value
       Current = Head;
     }
+
+    // Declaration of all other methods used in this class
+    // Defined below
     void AddToFront(T data);
     void AddToEnd(T data);
     void RemoveFirst(T data);
@@ -63,88 +75,106 @@ template <typename T> class LinkedList{
 };
 
 template <class T>
-LinkedList<T>::~LinkedList(void){  
+LinkedList<T>::~LinkedList(void){
 }
 
+// Method to print nodes in the LinkedList
 template <class T>
 void LinkedList<T>::PrintLinkedList()
 {
-    Node<T>* temp = new Node<T>();
-    temp = Head;
+    Node<T>* temp = new Node<T>(); // Initialize a temporary node
+    temp = Head; // Set the node equal to the head
 
+    // If the node is empty, the list is empty. Inform the user
     if (temp == NULL) {
         cout << "\nThe list is empty" << endl;
-        return;
+        return; // Exit the method
     }
+
     cout << "Survivor(s): ";
+
+    // Run through the LinkedList while the temp node is not null
     while (temp!=NULL) {
-        cout << temp->value<<" ";
-        temp = temp->Next;
+        cout << temp->value<<" "; // Print the value and whitespace
+        temp = temp->Next; // Move to the next node
     }
     cout << endl;
-    delete temp;
+    delete temp; // Remove the node
 }
 
+//Method to add a node to the end of the LinkedList
 template <class T>
 void LinkedList<T>::AddToEnd(T data){
-  Node<T>* newNode = new Node<T>(data);
+  Node<T>* newNode = new Node<T>(data); // create a node with given data to be added
   newNode->Next=NULL;
 
+  // If the list is empty, make the new node the head
   if (Head == NULL){
     Head = newNode;
   }
+
+  // Otherwise the list has nodes, so move through the list
   else{
-    Node<T>* temp = new Node<T>();
-    temp = Head;
+    Node<T>* temp = new Node<T>(); // Create a temp node to traverse the list
+    temp = Head; // Initialize it to the head
+
+    // Move through the list until the next node is NULL
     while(temp->Next!=NULL){
-      temp = temp->Next;
+      temp = temp->Next; // Move onto the next node
     }
-    newNode->Next = NULL;
-    temp->Next = newNode;
+    newNode->Next = NULL; // Initialize the new nodes next to null
+    temp->Next = newNode; // Make the temp's next node point to the new node
   }
 }
 
+
+// Method to add a new node to the front
 template <class T>
 void LinkedList<T>::AddToFront(T data){
-  Node<T> *newNode = new Node<T>(data);
+
+  Node<T> *newNode = new Node<T>(data); // Create a new node with the data provided
   newNode->Next=NULL;
 
+  // If the Head is Null, make the Head the new node
   if (Head == NULL){
     Head = newNode;
   }
 
+  // Otherwise create a new head
   else{
-    Node<T> *temp = new Node<T>();
-
-    temp = Head;
-    Head = newNode;
-    Head->Next = temp;
+    Node<T> *temp = new Node<T>(); // Temp to store the info for the head node
+    temp = Head; // Set the temp equal to the head
+    Head = newNode; // Make the head the new node
+    Head->Next = temp; // Set the Head's next node equal to the old Head
   }
 }
 
+// Method to remove the first node with the same value of
+// inputted data
 template <class T>
 void LinkedList<T>::RemoveFirst(T data){
+  // Create two nodes to keep track of positions
   Node<T>* temp = new Node<T>();
-  Node<T>* del = new Node<T>();
+  Node<T>* temp2 = new Node<T>();
 
+  // If the Head has the value
   if(Head->value==data){
-    del = Head;
-    Head = del->Next;
-    delete del;
+    temp2 = Head;
+    Head = temp2->Next;
+    delete temp2;
     return;
   }
 
   temp = Head;
-  del = Head->Next;
+  temp2 = Head->Next;
 
-  while (del!=NULL){
+  while (temp2!=NULL){
     if(temp->value==data){
-      temp->Next = del->Next;
-      delete del;
-      break;
+      temp->Next = temp2->Next;
+      delete temp2;
     }
-    temp = del;
-    del = del->Next;
+    temp = temp2;
+    temp2 = temp2->Next;
   }
 }
 
